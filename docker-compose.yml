@@ -1,0 +1,11 @@
+version: '3.9'
+services:
+  engine:
+    container_name: exodus
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - '5000:8000' # foo
+      - '5001:8001' # bar
+      - '5002:8002' # baz
