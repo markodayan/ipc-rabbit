@@ -1,6 +1,7 @@
 import express, { Express } from 'express';
 import RabbitMQ from 'src/rabbitmq/index.rabbitmq';
 import Consumer from 'src/rascal/consumer.rascal';
+import Broker from 'src/rascal/broker.rascal';
 
 async function run() {
   const service_name = process.env.SERVICE_NAME;
@@ -11,8 +12,7 @@ async function run() {
 
   const PORT = process.env.SERVICE_PORT;
 
-  // const rabbit = RabbitMQ.getInstance();
-  const consumer = Consumer.getInstance();
+  const broker = Broker.getInstance();
 
   app.listen(PORT, () => {
     console.log(`[${service_name}] Service running on port ${PORT}`);

@@ -23,9 +23,14 @@ const config: rascal.BrokerConfig = {
         'ready-exchange[baz] -> ready-queue',
         'ready-exchange[car] -> ready-queue',
       ],
-      publications: {},
+      publications: {
+        foo_ready: {
+          exchange: 'ready-exchange',
+          routingKey: 'bar',
+        },
+      },
       subscriptions: {
-        foo_sub: {
+        foo_ready: {
           queue: 'ready-queue',
         },
       },
