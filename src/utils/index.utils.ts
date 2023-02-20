@@ -1,3 +1,5 @@
+import { CustomError } from 'src/error/index.error';
+
 const delay = (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
@@ -14,8 +16,10 @@ const asyncRetry = async <T extends AsyncToWrap>(fn: T, options: RetryOptions = 
   try {
     console.log(`retries left: ${retries}`);
     return await fn();
-  } catch (err) {
-    console.log(err);
+  } catch (err: any) {
+    if (err.syscall === 'connect' && err.code === -111) {
+      console.error('RabbitMQ server not ready yet');
+    }
     if (retries === 0) {
       throw new Error('Retries exhausted');
     }

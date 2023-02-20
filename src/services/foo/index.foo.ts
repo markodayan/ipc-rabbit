@@ -1,5 +1,5 @@
 import express, { Express } from 'express';
-import RabbitMQ from 'src/rabbitmq/publisher';
+import RabbitMQ from 'src/rabbitmq/index.rabbitmq';
 
 async function run() {
   const service_name = process.env.SERVICE_NAME;

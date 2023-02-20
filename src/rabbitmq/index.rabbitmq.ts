@@ -3,6 +3,7 @@ dotenv.config();
 
 import amqplib from 'amqplib';
 import { asyncRetry } from 'src/utils/index.utils';
+import { CustomError } from 'src/error/index.error';
 
 const container_name = 'rabbitmq';
 
@@ -40,8 +41,8 @@ class RabbitMQ {
 
     // Connect to RabbitMQ server
     this.connection = await asyncRetry<any>(async () => await this.connect(url), {
-      delay_time: 2000,
-      retries: 3,
+      delay_time: 3000,
+      retries: 5,
     });
     // Create a channel
     this.channel = await this.connection.createChannel();
@@ -60,9 +61,8 @@ class RabbitMQ {
   public async connect(url: string): Promise<amqplib.Connection> {
     try {
       return await amqplib.connect(url);
-    } catch (error) {
-      console.log(error);
-      throw new Error('error in connect');
+    } catch (error: any) {
+      throw new CustomError(error.syscall, error.code, error.errno);
     }
   }
 }
