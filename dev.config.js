@@ -8,6 +8,10 @@ module.exports = {
       node_args: '-r tsconfig-paths/register ./src/index.ts foo',
       max_restarts: 10,
       restart_delay: 5000,
+      env: {
+        SERVICE_NAME: 'foo',
+        SERVICE_PORT: 8000,
+      },
     },
     {
       name: 'bar',
@@ -17,6 +21,10 @@ module.exports = {
       node_args: '-r tsconfig-paths/register ./src/index.ts bar',
       max_restarts: 10,
       restart_delay: 5000,
+      env: {
+        SERVICE_NAME: 'bar',
+        SERVICE_PORT: 8001,
+      },
     },
     {
       name: 'baz',
@@ -26,6 +34,10 @@ module.exports = {
       node_args: '-r tsconfig-paths/register ./src/index.ts baz',
       max_restarts: 10,
       restart_delay: 5000,
+      env: {
+        SERVICE_NAME: 'baz',
+        SERVICE_PORT: 8002,
+      },
     },
   ],
 };
