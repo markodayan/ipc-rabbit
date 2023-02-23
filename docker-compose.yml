@@ -8,9 +8,9 @@ services:
     environment:
       HOST_IP_ADDR: ${HOST_IP_ADDR}
     ports:
-      - '5000:8000' # foo
-      - '5001:8001' # bar
-      - '5002:8002' # baz
+      - '5000:5000' # foo
+      - '5001:5001' # bar
+      - '5002:5002' # baz
     depends_on:
       - rabbitmq
   rabbitmq:

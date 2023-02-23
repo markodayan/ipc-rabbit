@@ -2,7 +2,6 @@ import rascal from 'rascal';
 import { config as CONFIG } from './config.rascal';
 import { asyncRetry } from 'src/utils/index.utils';
 import { CustomError } from 'src/error/index.error';
-import { waitForPort } from 'src/utils/port.utils';
 
 class Broker {
   private static instance: Broker;
@@ -27,14 +26,14 @@ class Broker {
       retries: 5,
     });
 
-    await this.subscribe();
+    await this.subscribe('foo_ready');
 
-    await this.publish('hello world message');
-    await this.publish('hello world message');
-    await this.publish('hello world message');
-    await this.publish('hello world message');
-    await this.publish('hello world message');
-    await this.publish('hello world message');
+    // await this.publish('hello world message');
+    // await this.publish('hello world message');
+    // await this.publish('hello world message');
+    // await this.publish('hello world message');
+    // await this.publish('hello world message');
+    // await this.publish('hello world message');
 
     this.broker.on('error', (error) => {
       console.error(`Error: ${error.message}`);
@@ -57,17 +56,14 @@ class Broker {
     }
   }
 
-  public async publish(message: string) {
-    try {
-      await this.broker.publish('foo_ready', message);
-    } catch (error: any) {
-      console.log('publish error', error);
-    }
+  public async publish(pub_name: string, message: string) {
+    console.log(`[${process.env.SERVICE_NAME}] publishing message...`);
+    await this.broker.publish(pub_name, message);
   }
 
-  public async subscribe() {
+  public async subscribe(pub_name: string) {
     try {
-      const subscription = await this.broker.subscribe('foo_ready');
+      const subscription = await this.broker.subscribe(pub_name);
 
       subscription.on('message', (message, content, ackorNack) => {
         console.log(content);

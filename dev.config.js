@@ -10,7 +10,7 @@ module.exports = {
       restart_delay: 5000,
       env: {
         SERVICE_NAME: 'foo',
-        SERVICE_PORT: 8000,
+        SERVICE_PORT: 5000,
       },
     },
     {
@@ -23,7 +23,7 @@ module.exports = {
       restart_delay: 5000,
       env: {
         SERVICE_NAME: 'bar',
-        SERVICE_PORT: 8001,
+        SERVICE_PORT: 5001,
       },
     },
     {
@@ -36,7 +36,7 @@ module.exports = {
       restart_delay: 5000,
       env: {
         SERVICE_NAME: 'baz',
-        SERVICE_PORT: 8002,
+        SERVICE_PORT: 5002,
       },
     },
   ],

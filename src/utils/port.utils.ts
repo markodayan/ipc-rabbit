@@ -20,6 +20,10 @@ function timeout(ms: number, label: string) {
   );
 }
 
+/**
+ * Poll until a process is running on the supplied port number (it is important to know what host we are referring to here! -> see HOST_IP_ADDR for inter-container communication)
+ * @param {number} port_num - port number of running process
+ */
 async function waitForPort(port_num: number) {
   const PORT_LABEL_MAP: IPortMap = {
     5672: 'RabbitMQ',

@@ -14,11 +14,11 @@ const asyncRetry = async <T extends AsyncToWrap>(fn: T, options: RetryOptions = 
   let { retries = 3, delay_time = 2000 } = options;
 
   try {
-    console.log(`retries left: ${retries}`);
+    console.log(`[${process.env.SERVICE_NAME}] retries left: ${retries}`);
     return await fn();
   } catch (err: any) {
     if (err.syscall === 'connect' && err.code === -111) {
-      console.error('RabbitMQ server not ready yet');
+      console.error(`[${process.env.SERVICE_NAME}] RabbitMQ server not ready yet`);
     }
     if (retries === 0) {
       throw new Error('Retries exhausted');
