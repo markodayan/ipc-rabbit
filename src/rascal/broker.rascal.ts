@@ -2,6 +2,7 @@ import rascal from 'rascal';
 import { config as CONFIG } from './config.rascal';
 import { asyncRetry } from 'src/utils/index.utils';
 import { CustomError } from 'src/error/index.error';
+import { waitForPort } from 'src/utils/port.utils';
 
 class Broker {
   private static instance: Broker;
@@ -20,6 +21,7 @@ class Broker {
   }
 
   private async init() {
+    // Retry Logic
     this.broker = await asyncRetry<any>(async () => await this.connect(), {
       delay_time: 3000,
       retries: 5,
