@@ -2,7 +2,7 @@ import express, { Express } from 'express';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-import Broker from 'src/rascal/broker';
+import Broker from 'src/rascal/broker.rascal';
 import { waitForPort } from 'src/utils/port.utils';
 
 async function run() {
@@ -12,6 +12,7 @@ async function run() {
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
 
+  // Port 5001
   const PORT = process.env.SERVICE_PORT;
 
   // Instantiate Broker
@@ -19,30 +20,37 @@ async function run() {
 
   // Wait for RabbitMQ Server to be up and running
   await waitForPort(5672);
-  //Option 1: Wait for foo service (port 5000) to be up and running
-  await waitForPort(5000);
 
-  // Option 2: receive message from RabbitMQ showing that foo is ready
-
+  /**
+   * In this block we:
+   * - initialise the message broker
+   * - subscribe to the foo-queue (and wait for a ready message)
+   * - start the server (on port 5001)
+   * - publish to the bar-queue to signal that bar service is ready
+   */
   try {
     await rabbit_wrapper.init();
     const { broker } = rabbit_wrapper;
     const subscription = await broker.subscribe('foo_ready');
 
-    subscription.on('message', (message, content, ackOrNack) => {
-      console.log(`[${process.env.SERVICE_NAME}] ${content}`);
-      app.listen(PORT, () => {
+    subscription.on('message', async (message, content, ackOrNack) => {
+      console.log('bar service received:', content);
+
+      app.listen(PORT, async () => {
         console.log(`[${service_name}] Service running on port ${PORT}`);
+
+        console.log('publishing bar_ready');
+        await broker.publish(`${service_name}_ready`, service_name, { routingKey: service_name });
       });
 
       process.on('exit', (code) => {
         console.log(`[${service_name}] About to exit with code: ${code}`);
-      });
 
-      ackOrNack();
+        ackOrNack();
+      });
     });
   } catch (error: any) {
-    console.error(error);
+    console.log(`[${service_name}] top-level error (broker-related likely)`);
   }
 }
 

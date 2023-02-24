@@ -12,26 +12,56 @@ const config: rascal.BrokerConfig = {
       },
       exchanges: ['ready-exchange'],
       queues: {
-        'ready-queue': {
+        'foo-queue': {
+          assert: true,
+          options: { durable: true },
+        },
+        'bar-queue': {
+          assert: true,
+          options: { durable: true },
+        },
+        'baz-queue': {
           assert: true,
           options: { durable: true },
         },
       },
       bindings: [
-        'ready-exchange[foo] -> ready-queue',
-        'ready-exchange[bar] -> ready-queue',
-        'ready-exchange[baz] -> ready-queue',
-        'ready-exchange[car] -> ready-queue',
+        'ready-exchange[foo] -> foo-queue',
+        'ready-exchange[bar] -> bar-queue',
+        'ready-exchange[baz] -> baz-queue',
       ],
       publications: {
         foo_ready: {
           exchange: 'ready-exchange',
+          routingKey: 'foo',
+          options: {
+            persistent: true,
+          },
+        },
+        bar_ready: {
+          exchange: 'ready-exchange',
           routingKey: 'bar',
+          options: {
+            persistent: true,
+          },
+        },
+        baz_ready: {
+          exchange: 'ready-exchange',
+          routingKey: 'baz',
+          options: {
+            persistent: true,
+          },
         },
       },
       subscriptions: {
         foo_ready: {
-          queue: 'ready-queue',
+          queue: 'foo-queue',
+        },
+        bar_ready: {
+          queue: 'bar-queue',
+        },
+        baz_ready: {
+          queue: 'baz-queue',
         },
       },
     },
